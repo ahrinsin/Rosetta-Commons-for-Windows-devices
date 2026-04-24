@@ -36,6 +36,8 @@ Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11
 Administrative privileges on your Windows machine  
 Internet connection
 
+Compatable versions are listed in the version.txt file of this repository
+
 
 ### Step 1: Enable WSL
 Open PowerShell and run:
@@ -151,7 +153,7 @@ Create your PyRosetta folder; mkdir PyRosetta && cd PyRosetta && mkdir outputs
 Download the scoring.py script and place it into your PyRosetta directory.
 
 ## Example Prompt
-'''
+```
 conda activate rfdiff && cd ProteinEngineering/RFdiffusion
 
 python scripts/run_inference.py \
@@ -175,7 +177,7 @@ python protein_mpnn_run.py \
 python convert-fasta.py
 
 conda deactivate && conda activate pyrosetta && cd .. && cd PyRosetta
-'''
+```
 
 → This script pulls from PDB structures in your RFdiffusion/protein-engineering/output folder and FASTA sequences from your ProteinMPNN/protein-engineering folder
 python scoring.py

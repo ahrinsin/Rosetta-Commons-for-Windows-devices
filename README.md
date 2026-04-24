@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project focuses on designing and validating novel synthetic proteins capable of binding to α-synuclein oligomers at the β-sheet interface to progress towards targeted degradation therapies for Parkinson’s disease (PD). The work leverages advanced protein design tools including [RFdiffusion](https://github.com/RosettaCommons/RFdiffusion), ProteinMPNN, and PyRosetta to generate candidate binders and analyze their stability and binding potential.
+This project focuses on designing and validating novel synthetic proteins capable of binding to α-synuclein oligomers at the β-sheet interface to progress towards targeted degradation therapies for Parkinson’s disease (PD). The work leverages advanced protein design tools including [RFdiffusion](https://github.com/RosettaCommons/RFdiffusion), [ProteinMPNN](https://github.com/dauparas/ProteinMPNN), and [PyRosetta](https://github.com/RosettaCommons/rosetta) to generate candidate binders and analyze their stability and binding potential.
 
 ## Background
 

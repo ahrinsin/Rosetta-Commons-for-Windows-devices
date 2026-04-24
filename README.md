@@ -15,206 +15,134 @@ Alpha-synuclein (aS) is a brain protein that can misfold and aggregate into Lewy
 - Integration with ubiquitination pathways for targeted degradation.
 - Stepwise installation and usage guides for reproducibility.
 
-## Installation Summary
 
-For full installation instructions, see [installation/installation_guide.md](installation/installation_guide.md). The setup includes:
+## WSL Environment Setup Guide
+This repository provides a step-by-step guide to installing and setting up a Windows Subsystem for Linux (WSL) environment on your Windows machine. WSL allows you to run a Linux distribution alongside your Windows OS, enabling a powerful development environment with access to Linux tools and utilities.
 
-- Windows Subsystem for Linux (WSL) environment setup.
-- Installation of RFdiffusion and its dependencies.
-- Installation of ProteinMPNN and PyRosetta environments.
-- Downloading necessary models and scripts.
+### Table of Contents
 
-## Usage
-
-### Running RFdiffusion
-
-```bash
-conda activate rfdiff
-cd RFdiffusion
-python scripts/run_inference.py \
-  inference.output_prefix=protein-engineering/output/RFdesign \
-  inference.num_designs=1 \
-  contigmap.contigs="[A38-55/0 B38-55/0 90-110]" \
-  inference.input_pdb=protein-engineering/2n0a_truncated.pdb \
-  +inference.seed=10
-
-###Running ProteinMPNN
-
-```bash
-conda deactivate && conda activate proteinmpnn
-cd ProteinMPNN
-python protein_mpnn_run.py \
-  --pdb_path protein-engineering/RFdesign_4.pdb \
-  --out_folder protein-engineering \
-  --num_seq_per_target 5 \
-  --sampling_temp "0.2" \
-  --seed 121 \
-  --batch_size 5
-
-###Running PyRosetta
-
-```bash
-conda deactivate && conda activate pyrosetta
-cd PyRosetta
-python scoring.py
-
-##Results and Next Steps
-
-Identification of candidate binders targeting α-synuclein β-sheet interfaces.
-Analysis of binder stability and ubiquitin ligase recruitment potential.
-Future work includes linker design, fusion with E3 recruitment motifs, and wet lab validation.
-
-##References
-
-###RFdiffusion GitHub
-###Relevant literature on α-synuclein phosphorylation and ubiquitination (see docs/references.md)
-
-Contributors
-
-Reid Buck
-Aidan Hrinsin
+Prerequisites  
+Step 1: Enable WSL  
+Step 2: Install a Linux Distribution  
+Step 3: Set Up Your Linux Environment  
+Step 4: Update and Upgrade Packages  
+Step 5: Optional - Install Additional Tools  
+Troubleshooting  
+Resources
 
 
+### Prerequisites
 
----
-
-### installation/installation_guide.md
-
-```markdown
-# Installation Guide for Protein Engineering Project
-
-This guide provides detailed instructions for setting up the environment and dependencies required to run RFdiffusion, ProteinMPNN, and PyRosetta for protein design targeting Parkinson’s disease.
-
----
-
-## 1. Installing Windows Subsystem for Linux (WSL)
-
-1. Open PowerShell as Administrator.
-2. Run:
-   ```bash
-   wsl --install
+Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11  
+Administrative privileges on your Windows machine  
+Internet connection
 
 
-Create your Linux user account.
-Update packages:sudo apt update && sudo apt upgrade -y
+### Step 1: Enable WSL
+
+Open PowerShell as Administrator.  
+
+Run the following command to enable the WSL feature and the Virtual Machine Platform:
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+
+Restart your computer to apply the changes.  
+
+(Optional but recommended) Set WSL 2 as the default version by running:
+wsl --set-default-version 2
 
 
 
 
-2. Installing Miniconda
+### Step 2: Install a Linux Distribution
 
-Download Miniconda for Linux:curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+Open the Microsoft Store.  
+Search for your preferred Linux distribution (e.g., Ubuntu, Debian, Kali Linux).  
+Click Get or Install to download and install the distribution.
 
+Alternatively, you can install a distribution via PowerShell:
+wsl --install -d <DistributionName>
 
-Run the installer:bash Miniconda3-latest-Linux-x86_64.sh
+Replace <DistributionName> with the name of the distribution (e.g., Ubuntu).
 
+### Step 3: Set Up Your Linux Environment
 
-Restart your shell:wsl
-
-
-Accept Anaconda Terms of Service:conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
-
-
-
-
-3. Installing RFdiffusion
-
-Download and install Git and Python 3.11 if not already installed.
-Create and activate the RFdiffusion environment:conda create -n rfdiff python=3.11 -y
-conda activate rfdiff
+Launch the installed Linux distribution from the Start menu or by typing wsl in PowerShell or Command Prompt.  
+On first launch, you will be prompted to create a new user account and password for the Linux environment. Follow the prompts to complete setup.
 
 
-Clone the RFdiffusion repository:git clone https://github.com/RosettaCommons/RFdiffusion.git
+### Step 4: Update and Upgrade Packages
+Once inside your Linux shell, update the package lists and upgrade installed packages to ensure you have the latest versions:
+sudo apt update && sudo apt upgrade -y
+
+
+### Step 5: Optional - Install Additional Tools
+Depending on your development needs, you may want to install additional tools such as:
+
+Git: sudo apt install git  
+Build essentials: sudo apt install build-essential  
+Python: sudo apt install python3 python3-pip  
+Node.js: Follow instructions from NodeSource
+
+
+### Troubleshooting
+
+If you encounter issues with WSL version, check your current version with:
+wsl -l -v
+
+
+To upgrade an existing distribution to WSL 2:
+wsl --set-version <DistributionName> 2
+
+
+For detailed troubleshooting, visit the official Microsoft WSL documentation:https://docs.microsoft.com/en-us/windows/wsl/troubleshooting
+
+
+## Custom Scripts
+Here are some basic scripts that we devolped to use for each of the different programs under the Rosetta Commons umbrella.
+
+### RFdiffusion
+Access the SE2nv environment in the anaconda navigator and run its terminal
+
 cd RFdiffusion
 
+Let’s make a new directory for this test: mkdir test followed by cd test.
+Download in PDB 1XQ8: curl -O https://files.rcsb.org/download/1XQ8.pdb
 
-Install Python packages:pip install --upgrade pip setuptools wheel
-pip install torch==2.4.0 torchvision==0.19
-pip install dgl -f https://data.dgl.ai/wheels/torch-2.4/cu124/repo.html
-pip install hydra-core omegaconf pytorch-lightning einops scipy pandas==2.2.2 opt_einsum pyrsistent torchdata==0.8.0 pydantic numpy
+Leave the test folder by running:
 
+cd ..
 
-Install SE3Transformer:cd env/SE3Transformer
-pip install --no-cache-dir -r requirements.txt
-python setup.py install
-cd ../..
-pip install -e .
+Force only the CPU to run (lest you get dreaded dgl errors): set CUDA_VISIBLE_DEVICES=-1
 
+Run the following example prompt: 
 
-Download model weights:mkdir models && cd models
-curl -LOJ "http://files.ipd.uw.edu/pub/RFdiffusion/6f5902ac237024bdd0c176cb93063dc4/Base_ckpt.pt"
-curl -LOJ "http://files.ipd.uw.edu/pub/RFdiffusion/e29311f6f1bf1af907f9ef9f44b8328b/Complex_base_ckpt.pt"
-curl -LOJ "http://files.ipd.uw.edu/pub/RFdiffusion/60f09a193fb5e5ccdc4980417708dbab/Complex_Fold_base_ckpt.pt"
+python scripts/run_inference.py inference.output_prefix=.\test\output\motif_test inference.num_designs=2 contigmap.contigs="[30-45/A48-53/30-45]" inference.input_pdb=.\test\1XQ8.pdb
 
+With any luck this should prepare your proteins! Your outputs are pushed to test/output. The ones you care about opening in PyMOL or pushing to ProteinMPNN are, for instance, motif_test_0.pdb in the main folder.
 
+### ProteinMPNN
+Access the mlfold environment in the anaconda navigator and run its terminal
 
-
-4. Installing ProteinMPNN
-
-Deactivate RFdiffusion environment:conda deactivate
-
-
-Create and activate ProteinMPNN environment:conda create -n proteinmpnn python=3.11 -y
-conda activate proteinmpnn
-
-
-Clone ProteinMPNN repository:git clone https://github.com/dauparas/ProteinMPNN.git
 cd ProteinMPNN
 
+Let’s make a new directory for this test: mkdir test followed by cd test.
+Download in PDB 5L33: curl -O https://files.rcsb.org/download/5L33.pdb
 
-Install dependencies:pip install numpy torch
+Leave the test folder by running:
 
+cd ..
 
-Download convert-fasta.py script and place it in the ProteinMPNN directory.
+Run the following example prompt: 
 
+python protein_mpnn_run.py --pdb_path test/5L33.pdb --out_folder test/output --num_seq_per_target 5 --sampling_temp "0.1 0.2" --seed 42 --batch_size 1
 
-5. Installing PyRosetta
+Many things will say it’s not loaded. That’s expected since you never asked for those modules in our example prompt. If you see something like the following result, congratulations! Your ProteinMPNN is set up!
 
-Deactivate ProteinMPNN environment:conda deactivate
+Number of edges: 48
+Training noise level: 0.2A
+Generating sequences for: 5L33
+10 sequences of length 106 generated in 2.2241 seconds
 
-
-Create and activate PyRosetta environment:conda create -n pyrosetta python=3.11 -y
-conda activate pyrosetta
-
-
-Install PyRosetta:pip install pyrosetta --find-links https://west.rosettacommons.org/pyrosetta/quarterly/release
-
-
-Create PyRosetta folders:mkdir PyRosetta && cd PyRosetta && mkdir outputs
-
-
-Download scoring.py script and place it in the PyRosetta directory.
-
-
-6. Running the Pipeline
-RFdiffusion
-conda activate rfdiff
-cd RFdiffusion
-python scripts/run_inference.py \
-  inference.output_prefix=protein-engineering/output/RFdesign \
-  inference.num_designs=1 \
-  contigmap.contigs="[A38-55/0 B38-55/0 90-110]" \
-  inference.input_pdb=protein-engineering/2n0a_truncated.pdb \
-  +inference.seed=10
-
-ProteinMPNN
-conda deactivate && conda activate proteinmpnn
-cd ProteinMPNN
-python protein_mpnn_run.py \
-  --pdb_path protein-engineering/RFdesign_4.pdb \
-  --out_folder protein-engineering \
-  --num_seq_per_target 5 \
-  --sampling_temp "0.2" \
-  --seed 121 \
-  --batch_size 5
-python convert-fasta.py
-
-PyRosetta
-conda deactivate && conda activate pyrosetta
-cd PyRosetta
-python scoring.py
-
-  inference.num_designs=1 \
-  contigmap.contigs="[A38-55/0 B38-55/0 90-110]" \
-  inference.input_pdb=protein-engineering/2n0a_truncated.pdb \
-  +inference.seed=10
+You can find your output sequence in the \test\output\seq\ folder. It’ll be a .FA file you can open with Notepad/Notepad++.

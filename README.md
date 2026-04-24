@@ -22,7 +22,7 @@ This repository provides a step-by-step guide to installing and setting up a Win
 ### Table of Contents
 
 Prerequisites  
-Step 1: Enable WSL  
+Step 1: Download WSL  
 Step 2: Install a Linux Distribution  
 Step 3: Set Up Your Linux Environment  
 Step 4: Update and Upgrade Packages  
@@ -40,50 +40,10 @@ Internet connection
 
 ### Step 1: Enable WSL
 
-Open PowerShell as Administrator.  
+Open PowerShell and run:
 
-Run the following command to enable the WSL feature and the Virtual Machine Platform:
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+wsl -install
 
-
-Restart your computer to apply the changes.  
-
-(Optional but recommended) Set WSL 2 as the default version by running:
-wsl --set-default-version 2
-
-
-
-
-### Step 2: Install a Linux Distribution
-
-Open the Microsoft Store.  
-Search for your preferred Linux distribution (e.g., Ubuntu, Debian, Kali Linux).  
-Click Get or Install to download and install the distribution.
-
-Alternatively, you can install a distribution via PowerShell:
-wsl --install -d <DistributionName>
-
-Replace <DistributionName> with the name of the distribution (e.g., Ubuntu).
-
-### Step 3: Set Up Your Linux Environment
-
-Launch the installed Linux distribution from the Start menu or by typing wsl in PowerShell or Command Prompt.  
-On first launch, you will be prompted to create a new user account and password for the Linux environment. Follow the prompts to complete setup.
-
-
-### Step 4: Update and Upgrade Packages
-Once inside your Linux shell, update the package lists and upgrade installed packages to ensure you have the latest versions:
-sudo apt update && sudo apt upgrade -y
-
-
-### Step 5: Optional - Install Additional Tools
-Depending on your development needs, you may want to install additional tools such as:
-
-Git: sudo apt install git  
-Build essentials: sudo apt install build-essential  
-Python: sudo apt install python3 python3-pip  
-Node.js: Follow instructions from NodeSource
 
 
 ### Troubleshooting

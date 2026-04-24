@@ -2,6 +2,9 @@ Build Versions for Software
   Python 3.11.15
   WSL 2.6.3
   Git 2.54.0
+  RFdiffusion build 9535f19
+  ProteinMPNN build 8907e66
+  PyRosetta build 97c76ec
 
 Packages for RFdiffusion environment (rfdiff)
 ----------------------------

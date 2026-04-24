@@ -82,49 +82,73 @@ For detailed troubleshooting, visit the official Microsoft WSL documentation:htt
 Here are some basic scripts that we devolped to use for each of the different programs under the Rosetta Commons umbrella.
 
 ### RFdiffusion
-Access the SE2nv environment in the anaconda navigator and run its terminal
+Download Git [https://git-scm.com/install/windows] and Python (v3.11) [https://www.python.org/downloads/] if not already installed
 
-cd RFdiffusion
+Make your RFdiff directory and activate it:
 
-Let’s make a new directory for this test: mkdir test followed by cd test.
-Download in PDB 1XQ8: curl -O https://files.rcsb.org/download/1XQ8.pdb
+conda create -n rfdiff python=3.11 -y && conda activate rfdiff &&(change to your Python version) conda activate rfdiff
 
-Leave the test folder by running:
+Make a folder for the entire project, 
 
-cd ..
+mkdir Protein Engineering
 
-Force only the CPU to run (lest you get dreaded dgl errors): set CUDA_VISIBLE_DEVICES=-1
+Clone the RFdiffusion GitHub repo → git clone https://github.com/RosettaCommons/RFdiffusion.git && cd RFdiffusion
 
-Run the following example prompt: 
+Install all of your Python packages:
 
-python scripts/run_inference.py inference.output_prefix=.\test\output\motif_test inference.num_designs=2 contigmap.contigs="[30-45/A48-53/30-45]" inference.input_pdb=.\test\1XQ8.pdb
+pip install --upgrade pip setuptools wheel && pip install torch==2.4.0 torchvision==0.19 && pip install dgl -f https://data.dgl.ai/wheels/torch-2.4/cu124/repo.html && pip install hydra-core omegaconf pytorch-lightning einops scipy pandas==2.2.2 opt_einsum pyrsistent torchdata==0.8.0 pydantic numpy
 
-With any luck this should prepare your proteins! Your outputs are pushed to test/output. The ones you care about opening in PyMOL or pushing to ProteinMPNN are, for instance, motif_test_0.pdb in the main folder.
+Navigate to your SE3Transformer folder: 
+
+cd env/SE3Transformer
+
+Run the following install: 
+
+pip install --no-cache-dir -r requirements.txt
+
+Install SE3Transformer: 
+
+python setup.py install && cd ../.. && pip install -e .
+
+Installing the models; 
+
+mkdir models && cd models. 
+
+Then; 
+
+curl -LOJ "http://files.ipd.uw.edu/pub/RFdiffusion/6f5902ac237024bdd0c176cb93063dc4/Base_ckpt.pt" && curl -LOJ "http://files.ipd.uw.edu/pub/RFdiffusion/e29311f6f1bf1af907f9ef9f44b8328b/Complex_base_ckpt.pt" && curl -LOJ "http://files.ipd.uw.edu/pub/RFdiffusion/60f09a193fb5e5ccdc4980417708dbab/Complex_Fold_base_ckpt.pt"
+
+Create your directory and within it place your input .pdb file. mkdir protein-engineering
 
 ### ProteinMPNN
-Access the mlfold environment in the anaconda navigator and run its terminal
+Create your environment (making sure to leave RFdiffusion). 
 
-cd ProteinMPNN
+Exiting ProteinMPNN: conda deactivate && cd ..
 
-Let’s make a new directory for this test: mkdir test followed by cd test.
-Download in PDB 5L33: curl -O https://files.rcsb.org/download/5L33.pdb
+conda create -n proteinmpnn python=3.11 -y && conda activate proteinmpnn
 
-Leave the test folder by running:
+Clone the ProteinMPNN GitHub repo into your mlfold environment: 
 
-cd ..
+git clone https://github.com/dauparas/ProteinMPNN.git && cd ProteinMPNN
 
-Run the following example prompt: 
+Install your Python packages. pip install numpy torch
 
-python protein_mpnn_run.py --pdb_path test/5L33.pdb --out_folder test/output --num_seq_per_target 5 --sampling_temp "0.1 0.2" --seed 42 --batch_size 1
+Prepare your directory and within place the RFdiffusion’s output .pdb file. mkdir protein-engineering
 
-Many things will say it’s not loaded. That’s expected since you never asked for those modules in our example prompt. If you see something like the following result, congratulations! Your ProteinMPNN is set up!
+Download the convert-fasta.py script and place it into your ProteinMPNN directory.
 
-Number of edges: 48
-Training noise level: 0.2A
-Generating sequences for: 5L33
-10 sequences of length 106 generated in 2.2241 seconds
+### PyRosetta
+Create your environment (making sure to leave ProteinMPNN). 
 
-You can find your output sequence in the \test\output\seq\ folder. It’ll be a .FA file you can open with Notepad/Notepad++.
+Exiting ProteinMPNN: conda deactivate && cd ..
+
+conda create -n pyrosetta python=3.11 -y && conda activate pyrosetta
+
+Download the following: pip install pyrosetta --find-links https://west.rosettacommons.org/pyrosetta/quarterly/release
+
+Create your PyRosetta folder; mkdir PyRosetta && cd PyRosetta && mkdir outputs
+
+Download the scoring.py script and place it into your PyRosetta directory.
 
 ## Contributors
 Reid Buck

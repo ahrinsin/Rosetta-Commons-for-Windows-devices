@@ -79,7 +79,7 @@ For detailed troubleshooting, visit the official Microsoft WSL documentation:htt
 
 
 ## Custom Scripts
-Here are some basic scripts that we devolped to use for each of the different programs under the Rosetta Commons umbrella.
+Below is a basic rundown of opening and running each of the different programs.
 
 ### RFdiffusion
 Download Git [https://git-scm.com/install/windows] and Python (v3.11) [https://www.python.org/downloads/] if not already installed
@@ -149,6 +149,36 @@ Download the following: pip install pyrosetta --find-links https://west.rosettac
 Create your PyRosetta folder; mkdir PyRosetta && cd PyRosetta && mkdir outputs
 
 Download the scoring.py script and place it into your PyRosetta directory.
+
+## Example Prompt
+'''
+conda activate rfdiff && cd ProteinEngineering/RFdiffusion
+
+python scripts/run_inference.py \
+  inference.output_prefix=protein-engineering/output/RFdesign \
+  inference.num_designs=1 \
+  contigmap.contigs="[PDB_CHAINS LENGTH]" \
+  inference.input_pdb=protein-engineering/YOUR_INPUT_PDB.pdb \
+
+conda deactivate && conda activate proteinmpnn && cd .. && cd ProteinMPNN
+
+
+→ Copy your PDB files to the protein-engineering folder of ProteinMPNN
+→ Ensure your RFdesign is manually indexed when running ProteinMPNN
+python protein_mpnn_run.py \
+  --pdb_path protein-engineering/RFdesign_0.pdb \
+  --out_folder protein-engineering \
+  --num_seq_per_target 1 \
+  --sampling_temp "0.2 0.25 0.3" \
+  --batch_size 1
+
+python convert-fasta.py
+
+conda deactivate && conda activate pyrosetta && cd .. && cd PyRosetta
+'''
+
+→ This script pulls from PDB structures in your RFdiffusion/protein-engineering/output folder and FASTA sequences from your ProteinMPNN/protein-engineering folder
+python scoring.py
 
 ## Contributors
 Reid Buck
